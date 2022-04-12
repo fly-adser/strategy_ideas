@@ -1,4 +1,3 @@
-
 class AdinfoReq(object):
 
     def __init__(self, adId=None, ecpm=None, fixedPos=None):
@@ -8,10 +7,9 @@ class AdinfoReq(object):
 
 class ContentInfoReq(object):
 
-    def __init__(self, contentId=None, score=None, fixedPos=None):
+    def __init__(self, contentId=None, score=None):
         self.contentId = contentId
         self.score     = score
-        self.fixedPod  = fixedPos
 
 class AdinfoRes(object):
 
@@ -29,9 +27,8 @@ class ContentInfoRes(object):
 
 class MixRankerRequest(object):
 
-    def __init__(self, requestId=None, pages=None, adInfoReqs=[], contentInfoReqs=[]):
+    def __init__(self, requestId=None, adInfoReqs=[], contentInfoReqs=[]):
         self.requestId       = requestId
-        self.pages           = pages
         self.adInfoReqs      = adInfoReqs
         self.contentInfoReqs = contentInfoReqs
 
