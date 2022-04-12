@@ -37,6 +37,6 @@ class MixRankerRequest(object):
 
 class MixRankerResponse(object):
 
-    def __init__(self, adInfoReqs=[], contentInfoReqs=[]):
-        self.adInfoReqs = adInfoReqs
-        self.contentInfoReqs = contentInfoReqs
+    def __init__(self, adInfoRes=[], contentInfoRes=[]):
+        self.adInfoRes = adInfoRes
+        self.contentInfoRes = contentInfoRes
