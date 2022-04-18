@@ -27,13 +27,14 @@ class ContentInfoRes(object):
 
 class MixRankerRequest(object):
 
-    def __init__(self, requestId=None, adInfoReqs=[], contentInfoReqs=[]):
+    def __init__(self, requestId=None, pages=0, adInfoReqs=[], contentInfoReqs=[]):
         self.requestId       = requestId
+        self.pages           = pages
         self.adInfoReqs      = adInfoReqs
         self.contentInfoReqs = contentInfoReqs
 
 class MixRankerResponse(object):
 
     def __init__(self, adInfoRes=[], contentInfoRes=[]):
-        self.adInfoRes = adInfoRes
+        self.adInfoRes      = adInfoRes
         self.contentInfoRes = contentInfoRes

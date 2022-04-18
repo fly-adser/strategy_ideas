@@ -1,12 +1,11 @@
-from envs.ClassInfo import *
+from script.mix_common.ClassInfo import *
 
 """
 广告混排服务模拟，说明文档参考：
 """
 class Mix_RankerV1(object):
 
-    def __init__(self, topPos=1, maxInterval=0, maxAdsNum=3, alpha=1.0):
-        self.topPos      = topPos
+    def __init__(self, maxInterval=0, maxAdsNum=3, alpha=1.0):
         self.maxInterval = maxInterval
         self.maxAdsNum   = maxAdsNum
         self.alpha       = alpha
@@ -111,19 +110,29 @@ class Mix_RankerV1(object):
     广告和资讯混排过程（归并排序）
     """
     def mixProcess(self, mixRankerRequest, listAds, listNews):
-        pos, indexAd, indexNews = 1, 0, 0
+        pos, indexAd, indexNews, pages = 1, 0, 0, mixRankerRequest.pages
         adInfoReqs, contentInfoReqs = mixRankerRequest.adInfoReqs, mixRankerRequest.contentInfoReqs
+
+        adInfoReqs.sort(key=lambda x: x.ecpm, reverse=True)
+        contentInfoReqs.sort(key=lambda x: x.score, reverse=True)
 
         fixedPosAd = self.getFixedPos(adInfoReqs)
         self.adjustEcpm(adInfoReqs)
-        contentInfoReqs.sort(key=lambda x:x.score, reverse=True)
 
         while indexAd<len(adInfoReqs) and indexNews<len(contentInfoReqs):
             if self.insertAds(pos, listAds, fixedPosAd):
                 pos += 1
                 continue
 
-            if pos<self.topPos or len(listAds)>=self.maxAdsNum or (len(listAds)>0 and pos-listAds[-1].pos<=self.maxInterval):
+            if pages==1 and pos==1:
+                contentInfoRes = self.createContent(contentInfoReqs[indexNews], pos)
+                listNews.append(contentInfoRes)
+
+                indexNews += 1
+                pos += 1
+                continue
+
+            if len(listAds)>=self.maxAdsNum or (len(listAds)>0 and pos-listAds[-1].pos<=self.maxInterval):
                 contentInfoRes = self.createContent(contentInfoReqs[indexNews], pos)
                 listNews.append(contentInfoRes)
 
@@ -143,6 +152,9 @@ class Mix_RankerV1(object):
 
                 indexNews += 1
                 pos += 1
+
+        if self.insertAds(pos, listAds, fixedPosAd):
+            pos += 1
 
         while indexNews<len(contentInfoReqs):
             if self.insertAds(pos, listAds, fixedPosAd):
