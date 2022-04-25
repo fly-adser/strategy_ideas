@@ -1,4 +1,4 @@
-from script.mix_common.ClassInfo import *
+from mix_ranker.src.mix_common.ClassInfo import *
 
 """
 广告混排服务模拟，说明文档参考：

@@ -1,6 +1,6 @@
-from script.model.modelForScoreV1 import Mix_RankerV1
-from script.mix_common.Estimate import Estimate
-from script.mix_common.ClassInfo import *
+from mix_ranker.src.model.modelForScoreV1 import Mix_RankerV1
+from mix_ranker.src.mix_common.Estimate import Estimate
+from mix_ranker.src.mix_common.ClassInfo import *
 import pandas as pd
 import numpy as np
 import os
