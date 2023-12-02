@@ -24,3 +24,63 @@ def obj_func(x):
     total = 0.0
     for i in range(int(n / interval)):
         block = datas[i*interval: i*interval+interval, :]
+        pctr = block[:,0]
+        pcvr = block[:,1]
+        wp   = block[:,2]
+        alpha = x[i]
+        beta  = x[i+int(n/inteval)]
+        bid_wp = alpha * pctr * pcvr + beta * C * pctr - wp
+        xij = sigmoidN(bid_wp)
+        val = pctr * pcvr * xij
+        total += np.sum(val)
+    return -total
+
+def constraint_ueq(x):
+    datas = df.values
+    cost = 0.0
+    click = 0.0
+    for i in range(int(n / inteval)):
+        block = datas[i*inteval:i*inteval+inteval, :]
+        pctr = block[:,0]
+        pcvr = block[:,1]
+        wp   = block[:,2]
+        alpha = x[i]
+        beta  = x[i+int(n/inteval)]
+        bid_wp = alpha * pctr * pcvr + beta * C * pctr - wp
+        xij = sigmoidN(bid_wp)
+        
+        click += np.sum(xij*pctr)
+        cost += np.sum(xij*wp)
+        
+    return [cost-B, cost-C*click]
+
+def calc(x):
+    datas = df.values
+    cost = 0.0
+    click = 0.0
+    total = 0.0
+    xlist = []
+    for i in range(int(n / inteval)):
+        block = datas[i*inteval:i*inteval+inteval, :]
+        pctr = block[:,0]
+        pcvr = block[:,1]
+        wp   = block[:,2]
+        alpha = x[i]
+        beta  = x[i+int(n/inteval)]
+        bid_wp = alpha * pctr * pcvr + beta * C * pctr - wp
+        xij = sigmoidN(bid_wp)
+        xlist += xij.tolist()
+        val = pctr * pcvr * xij
+        total += np.sum(val)
+        click += np.sum(xij*pctr)
+        cost += np.sum(xij*wp)
+        
+    return total, cost, cost/click, np.sum(xlist)
+
+bounds = Bounds([0. for i in range(m)], [10000.0 for i in range(int(m/2))] + [1.0 for i in range(int(m/2))])
+nlc = NonlinearConstraint(constraint_ueq, [-np.inf, -np.inf], [0.0,0.0])
+result = differential_evolution(obj_func,bounds,constraints=(nlc),seed=1)
+x = result.x
+
+print(calc(x))
+print(x)
