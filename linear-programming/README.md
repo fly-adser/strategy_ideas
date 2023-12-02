@@ -37,5 +37,5 @@ options：可选择的求解器字典(非必选项)
 - 将优化问题中的 $x_{i}$ 表示为：  $x_{i}=S(bid_{i} - wp_{i})$
 - 找到一个可微函数逼近示性函数 $S$
 
-[差分进化算法](https://zhuanlan.zhihu.com/p/462522469) 
+[差分进化算法](https://zhuanlan.zhihu.com/p/462522469)    
 [API介绍文档](https://vimsky.com/examples/usage/python-scipy.optimize.differential_evolution.html)
